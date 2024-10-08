@@ -116,8 +116,8 @@ Menampilkan grafik karakteristik terhadap tingkat resiko:
 
 Mencari korelasi antara usia, tekanan darah, kadar gula darah dan detak jantung
     correlation = data[['Age', 'SystolicBP', 'DiastolicBP', 'BS', 'HeartRate', 'RiskLevel']].corr(numeric_only=True)
->> Memetakan korelasi dalam bentuk heatmap. 
->> Memetakan korelasi dalam bentuk scatterplot. \
+Memetakan korelasi dalam bentuk heatmap. 
+Memetakan korelasi dalam bentuk scatterplot. 
 
 
 ## **Data Preparation**
