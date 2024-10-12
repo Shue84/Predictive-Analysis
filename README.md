@@ -124,30 +124,156 @@ Memetakan korelasi dalam bentuk scatterplot.
 ### Membagi Data menjadi Fitur x dan y
 x adalah fitur usia, tekanan darah, kadar gula darah, suhu tubuh, dan detak jantung.
 y adalah fitur target, yaitu tingkat resiko kehamilan.
-\ X = data.drop(["RiskLevel"], axis =1)
-\ y = data["RiskLevel"]
+
+X = data.drop(["RiskLevel"], axis =1)
+y = data["RiskLevel"]
 
 ### Scaling
 Scaling membantu membuat fitur data menjadi bentuk yang lebih mudah diolah oleh algoritma sehingga hasil model akan lebih baik. Langkah selanjutnya adalah melakukan standarisasi pada fitur numerik yaitu 'Age', 'SystolicBP', 'DiastolicBP', 'BS', 'HeartRate' dengan menggunakan teknik StandardScaler dari library Scikitlearn.
 
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
+scaler.fit(X)
+X_scaled = scaler.transform(X)
+
 ### Train-Test-Split
 Membagi dataset menjadi data latih (train) dan data uji (test) dengan perbandingan 70:30. Ratio ini dianggap cukup karena besar data yang adalah 1014. Ratio ini juga diambil dengan pengujian pada ratio 80:20 dimana hasil akurasi rendah lalu diulang dengan 70:30. 
+
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.3, random_state=101, stratify=y)
+
+Total # of sample in whole dataset: 1014
+Total # of sample in train dataset: 709
+Total # of sample in test dataset: 305
 
 
 ## **Model Development**
 Tahap selanjutnya: mengembangkan model machine learning dengan empat algoritma. Kemudian, kita akan mengevaluasi performa masing-masing algoritma dan menentukan algoritma mana yang memberikan hasil prediksi terbaik. Keempat algoritma yang akan kita gunakan, antara lain:
 1. K-Nearest Neighbor.
-   Pertama menggunakan 1 neighbor untuk melihat tingkat akurasi. Kemudian menguji nilai K yang cocok. Dari hasil tersebut, didapatkan bahwa error sama untuk semua nilai K. Model kemudian dibangun dengan 10 neighbor. 
+   Pertama menggunakan 1 neighbor untuk melihat tingkat akurasi. Kemudian menguji nilai K yang cocok. Dari hasil tersebut, didapatkan bahwa error terkecil pada nilai K=1. 
+   knn = KNeighborsClassifier(n_neighbors=1)
+   knn.fit(X_train, y_train)
+   y_pred_train_knn = knn.predict(X_train)
+   y_pred_test_knn = knn.predict(X_test)
+
 2. Random Forest.
-   Menggunakan Hyperparameter Grid Search dan mencari parameter yang sesuai. Didapatkan hasil Best Parameters:  {'criterion': 'gini', 'max_depth': 20, 'min_samples_leaf': 2, 'n_estimators': 500}. 
+   Menggunakan Hyperparameter Grid Search dan mencari parameter yang sesuai. Didapatkan hasil Best Parameters:  {'criterion': 'gini', 'max_depth': 20, 'min_samples_leaf': 2, 'n_estimators': 500}.
+  from sklearn.ensemble import RandomForestClassifier
+  from sklearn.model_selection import GridSearchCV
+  forest = RandomForestClassifier(class_weight=class_weight)
+  param_grid = {
+    'n_estimators': [100, 300, 500],
+    'criterion': ['gini', 'entropy'],
+    'max_depth': [20, 25, 30],
+    'min_samples_leaf': [2, 3, 5] 
+  }
+  grid_search_forest = GridSearchCV(forest, param_grid, cv=5, scoring='accuracy', n_jobs=-1)
+  grid_search_forest.fit(X_train, y_train)
+  print('Best Parameters: ', grid_search_forest.best_params_)
+  print('Best Accuracy: ', grid_search_forest.best_score_)
+  best_forest = grid_search_forest.best_estimator_
+  y_pred_train_rf = grid_search_forest.predict(X_train)
+  y_pred_test_rf = grid_search_forest.predict(X_test)
+   
 3. Decision Tree Classifier.
+   from sklearn.tree import DecisionTreeClassifier
+   decision_tree = DecisionTreeClassifier()
+   decision_tree.fit(X_train, y_train)
+   y_pred_train_dt = decision_tree.predict(X_train)
+   y_pred_test_dt = decision_tree.predict(X_test)
+   
 4. XGB Classifier.
-   Digunakan n-estimators: 50 
+   !pip install xgboost
+   from sklearn.model_selection import GridSearchCV
+   import xgboost as xgb
+   xgb_model = xgb.XGBClassifier(n_estimators=50)
+   param_grid = {
+    'eta': [0.01, 0.05, 0.1, 0.35],
+    'max_depth': [2, 4, 7, 9, 12, 17],
+    'min_child_weight': [2, 4, 7, 9, 12, 17]
+    }
+   xgb_search = GridSearchCV(estimator=xgb_model, param_grid=param_grid, cv=3)
+   xgb_search.fit(X_train, y_train)
+   xgb_classifier = xgb_search.best_estimator_
+   xgb_classifier.fit(X_train, y_train)
+   y_pred_train_xgb = xgb_classifier.predict(X_train)
+   y_pred_test_xgb = xgb_classifier.predict(X_test)
 
 ## **Model Evaluation**
 ### Evaluasi model 
-Menggunakan metrik evaluasi 
+Menggunakan metrik "accuracy" dengan accuracy_score antara train dan test
+from sklearn.metrics import accuracy_score, precision_score
 
+### Evaluasi akurasi model KNN
+accuracy_train_knn = accuracy_score(y_pred_train_knn, y_train)
+accuracy_test_knn = accuracy_score(y_pred_test_knn, y_test)
+--> Hasil: KNN - accuracy_train: 0.9111424541607899, KNN - accuracy_test: 0.7934426229508197
+--> Insight: Dengan KNN nilai accuracy pada data train = 91% dan data test = 79%
 
-### Menguji model 
-Dengan prediksi, didapatkan bahwa hasil dari model Random Forest tidak jauh berbeda dengan nilai asli. Walaupun Logistic Regression dan Decision Tree memberikan hasil akurat 0 seperti pada nilai asli, namun tidak menjamin hasil percobaan selanjutnya karena saat evaluasi keduanya memberikan nilai error lebih besar daripada Random Forest. 
+### Evaluasi akurasi model RF
+accuracy_train_rf = accuracy_score(y_pred_train_rf, y_train)
+accuracy_test_rf = accuracy_score(y_pred_test_rf, y_test)
+--> Hasil: Random Forest - accuracy_train: 0.9167842031029619, Random Forest - accuracy_test: 0.7836065573770492
+--> Insight: Dengan Random Forest, nilai accuracy pada data train = 92% dan data test = 78%
+
+### Evaluasi akurasi model Decision Tree
+accuracy_train_dt = accuracy_score(y_pred_train_dt, y_train)
+accuracy_test_dt = accuracy_score(y_pred_test_dt, y_test)
+--> Hasil: Decision Tree - accuracy_train: 0.9308885754583921, Decision Tree - accuracy_test: 0.7967213114754098
+--> Insight: Dengan Decision Tree, nilai accuracy pada data train = 93% dan data test = 80%
+
+### Evaluasi akurasi model XGB Classifier
+accuracy_train_xgb = accuracy_score(y_pred_train_xgb, y_train)
+accuracy_test_xgb = accuracy_score(y_pred_test_xgb, y_test)
+--> Hasil: Decision Tree - accuracy_train: 0.9294781382228491, Decision Tree - accuracy_test: 0.7967213114754098
+--> Insight: Dengan XGB Classifier, nilai accuracy pada data train = 93% dan data test = 80%
+
+### Memetakan accuracy 4 algoritma dalam plot
+results_df = pd.DataFrame({
+    'Model': ['KNN', 'Random Forest', 'Decision Tree', 'XGB Classifier'],
+    'Accuracy Train': [accuracy_train_knn, accuracy_train_rf, accuracy_train_dt, accuracy_train_xgb],
+    'Accuracy Test': [accuracy_test_knn, accuracy_test_rf, accuracy_test_dt, accuracy_test_xgb]
+})
+accuracy = results_df[['Model', 'Accuracy Train', 'Accuracy Test']]
+
+Hasilnya kemudian dipetakan dalam barplot. 
+--> Dari hasil di atas, didapatkan bahwa keempat model memiliki nilai akurasi yang hampir sama.
+
+### Mengembangkan model 
+models = {
+    'KNN': KNeighborsClassifier(n_neighbors=1),
+    'Random Forest': RandomForestClassifier(class_weight=class_weight, **grid_search_forest.best_params_),
+    'Decision Tree': DecisionTreeClassifier(),
+    'XGB Classifier': XGBClassifier(**xgb_search.best_params_)
+}
+
+Melatih model: 
+best_model = None
+best_accuracy = 0
+
+for model_name, model in models.items():
+    model.fit(X_train, y_train)
+
+    # Make predictions on the test set
+    y_pred = model.predict(X_test)
+
+    # Calculate the accuracy
+    accuracy = accuracy_score(y_test, y_pred)
+
+    # Update the best model if the current model has higher accuracy
+    if accuracy > best_accuracy:
+        best_accuracy = accuracy
+        best_model = model
+        best_model_name = model_name
+
+The best model is XGB Classifier with an accuracy of 0.8032786885245902
+
+### Menguji Model
+prediksi = X_test[:1].copy()
+pred_dict = {'y_true':y_test[:1]}
+for name, model in models.items():
+    pred_dict['prediksi_'+name] = model.predict(prediksi).round(1)
+
+pd.DataFrame(pred_dict)
+
+Keempat algoritma menghasilkan hasil yang sama. 
