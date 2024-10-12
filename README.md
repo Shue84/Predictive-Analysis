@@ -36,13 +36,13 @@ Predictive analysis ini akan berfokus pada pengolahan data usia, tekanan darah s
 ### *Solution Statements:*
 Outcomes yang diharapkan adalah 3 kategori: high risk, mid risk, low risk.
 Model machine learning akan dibangun dengan beberapa algoritma dan dipilih model dengan kesalahan prediksi terkecil.
-1. Multinominal logistic regression.
-2. K-Nearest Neighbor.
-3. Random Forest.
-4. Decision Tree Classifier.
+1. K-Nearest Neighbor.
+2. Random Forest.
+3. Decision Tree Classifier.
+4. XGB Classifier
 
 ### *Metrik Evaluasi*
-Metrik yang digunakan adalah Mean Squared Error (menghitung jumlah selisih kuadrat rata-rata nilai sebenarnya dengan nilai prediksi).
+Metrik yang digunakan adalah Accuracy (ketepatan klasifikasi tingkat resiko kehamilan - high risk, mid risk, low risk).
 
 
 ## **Data Understanding**
@@ -121,27 +121,33 @@ Memetakan korelasi dalam bentuk scatterplot.
 
 
 ## **Data Preparation**
-### Train-Test-Split
-Membagi dataset menjadi data latih (train) dan data uji (test) dengan perbandingan 80:20. Ratio ini dianggap cukup karena besar data yang adalah 1014.
+### Membagi Data menjadi Fitur x dan y
+x adalah fitur usia, tekanan darah, kadar gula darah, suhu tubuh, dan detak jantung.
+y adalah fitur target, yaitu tingkat resiko kehamilan.
+\ X = data.drop(["RiskLevel"], axis =1)
+\ y = data["RiskLevel"]
 
-### Standarisasi
-Melakukan standarisasi pada fitur numerik yaitu 'Age', 'SystolicBP', 'DiastolicBP', 'BS', 'HeartRate' dengan menggunakan teknik StandarScaler dari library Scikitlearn. Standarisasi membantu membuat fitur data menjadi bentuk yang lebih mudah diolah oleh algoritma sehingga hasil model akan lebih baik.
+### Scaling
+Scaling membantu membuat fitur data menjadi bentuk yang lebih mudah diolah oleh algoritma sehingga hasil model akan lebih baik. Langkah selanjutnya adalah melakukan standarisasi pada fitur numerik yaitu 'Age', 'SystolicBP', 'DiastolicBP', 'BS', 'HeartRate' dengan menggunakan teknik StandardScaler dari library Scikitlearn.
+
+### Train-Test-Split
+Membagi dataset menjadi data latih (train) dan data uji (test) dengan perbandingan 70:30. Ratio ini dianggap cukup karena besar data yang adalah 1014. Ratio ini juga diambil dengan pengujian pada ratio 80:20 dimana hasil akurasi rendah lalu diulang dengan 70:30. 
 
 
 ## **Model Development**
 Tahap selanjutnya: mengembangkan model machine learning dengan empat algoritma. Kemudian, kita akan mengevaluasi performa masing-masing algoritma dan menentukan algoritma mana yang memberikan hasil prediksi terbaik. Keempat algoritma yang akan kita gunakan, antara lain:
-1. Multinominal logistic regression.
-2. K-Nearest Neighbor.
-3. Random Forest.
-4. Decision Tree Classifier.
-
-### Hyperparameter tuning 
-Menggunakan XGBClassifier
-
+1. K-Nearest Neighbor.
+   Pertama menggunakan 1 neighbor untuk melihat tingkat akurasi. Kemudian menguji nilai K yang cocok. Dari hasil tersebut, didapatkan bahwa error sama untuk semua nilai K. Model kemudian dibangun dengan 10 neighbor. 
+2. Random Forest.
+   Menggunakan Hyperparameter Grid Search dan mencari parameter yang sesuai. Didapatkan hasil Best Parameters:  {'criterion': 'gini', 'max_depth': 20, 'min_samples_leaf': 2, 'n_estimators': 500}. 
+3. Decision Tree Classifier.
+4. XGB Classifier.
+   Digunakan n-estimators: 50 
 
 ## **Model Evaluation**
-Dengan evaluasi XGBClassifier dan juga perbandingan 4 model dengan metrik Mean Squared Error, didapatkan bahwa model Random Forest memberikan angka error paling kecil di antara 4 model lainnya, sedangkan model dari Logistic Regression memberikan angka error paling besar. 
-Karena itu, model Random Forest yang akan dipilih sebagai model terbaik dalam memetakan tingkat resiko kehamilan. 
+### Evaluasi model 
+Menggunakan metrik evaluasi 
+
 
 ### Menguji model 
 Dengan prediksi, didapatkan bahwa hasil dari model Random Forest tidak jauh berbeda dengan nilai asli. Walaupun Logistic Regression dan Decision Tree memberikan hasil akurat 0 seperti pada nilai asli, namun tidak menjamin hasil percobaan selanjutnya karena saat evaluasi keduanya memberikan nilai error lebih besar daripada Random Forest. 
