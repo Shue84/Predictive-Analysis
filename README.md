@@ -71,8 +71,10 @@ matplotlib.pyplot
 seaborn
 
 ### Download file dari Kaggle
+```
 kaggle datasets download -d csafrit2/maternal-health-risk-data
 unzip maternal-health-risk-data.zip
+```
 
 ### Membaca data pada file yang sudah di-download
 data = pd.read_csv("/content/Maternal Health Risk Data Set.csv")
