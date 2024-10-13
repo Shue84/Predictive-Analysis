@@ -117,13 +117,13 @@ data = pd.read_csv("/content/Maternal Health Risk Data Set.csv")
 Bivariate Analysis - Usia terhadap Tingkat Resiko
     Menggunakan boxplot 
     ![Usia terhadap tingkat resiko](/gambar/Age%20by%20Risk%20Level.JPG)
-    
+
 Bivariate Analysis - Tekanan Darah terhadap Tingkat Resiko
     Memetakan distribusi systolicBP dan diastolicBP dengan histogram
     Menggunakan boxplot
-    ![Tekanan darah distribusi](https://github.com/Shue84/Predictive-Analysis/blob/main/gambar/Blood%20Pressure%20Distribution.JPG)
-    ![Tekanan darah terhadap tingkat resiko](https://github.com/Shue84/Predictive-Analysis/blob/main/gambar/Blood%20Pressure%20by%20Risk%20Level.JPG)
-    
+    ![Tekanan darah distribusi](/gambar/Blood%20Pressure%20Distribution.JPG)
+    ![Tekanan darah terhadap tingkat resiko](/gambar/Blood%20Pressure%20by%20Risk%20Level.JPG)
+
 Bivariate Analysis - Kadar Gula Darah terhadap Tingkat Resiko
     Menggunakan boxplot
     ![Gula darah terhadap tingkat resiko](https://github.com/Shue84/Predictive-Analysis/blob/main/gambar/Blood%20Sugar%20by%20Risk%20Level.JPG) 
