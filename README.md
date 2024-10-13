@@ -101,7 +101,8 @@ data = pd.read_csv("/content/Maternal Health Risk Data Set.csv")
 ### Exploratory Data Analysis (EDA)
 Bivariate Analysis - Usia terhadap Tingkat Resiko
     Menggunakan boxplot 
-    ![Usia terhadap tingkat resiko](gambar/Age by Risk Level.jpg)
+    ![Usia terhadap tingkat resiko](https://github.com/Shue84/Predictive-Analysis/blob/main/gambar/Age%20by%20Risk%20Level.JPG)
+    
 Bivariate Analysis - Tekanan Darah terhadap Tingkat Resiko
     Memetakan distribusi systolicBP dan diastolicBP dengan histogram
     Menggunakan boxplot
