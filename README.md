@@ -106,12 +106,20 @@ Bivariate Analysis - Usia terhadap Tingkat Resiko
 Bivariate Analysis - Tekanan Darah terhadap Tingkat Resiko
     Memetakan distribusi systolicBP dan diastolicBP dengan histogram
     Menggunakan boxplot
+    ![Tekanan darah distribusi](https://github.com/Shue84/Predictive-Analysis/blob/main/gambar/Blood%20Pressure%20Distribution.JPG)
+    ![Tekanan darah terhadap tingkat resiko](https://github.com/Shue84/Predictive-Analysis/blob/main/gambar/Blood%20Pressure%20by%20Risk%20Level.JPG)
+    
 Bivariate Analysis - Kadar Gula Darah terhadap Tingkat Resiko
     Menggunakan boxplot
+    ![Gula darah terhadap tingkat resiko](https://github.com/Shue84/Predictive-Analysis/blob/main/gambar/Blood%20Sugar%20by%20Risk%20Level.JPG) 
+    
 Bivariate Analysis - Suhu Tubuh terhadap Tingkat Resiko
     Menggunakan violinplot agar lebih terlihat jelas
+    ![Suhu tubuh terhadap tingkat resiko](https://github.com/Shue84/Predictive-Analysis/blob/main/gambar/Blood%20Temperature%20by%20Risk%20Level.JPG)
+    
 Bivariate Analysis - Detak Jantung terhadap Tingkat Resiko
     Menggunakan boxplot
+    ![Detak jantung terhadap tingkat resiko](https://github.com/Shue84/Predictive-Analysis/blob/main/gambar/Heart%20Rate%20by%20Risk%20Level.JPG)
 
 *Insights:*
 - Kehamilan dengan resiko rendah (low risk) adalah yang paling sering dengan lebih dari setengah kasus.
@@ -122,7 +130,13 @@ Bivariate Analysis - Detak Jantung terhadap Tingkat Resiko
 - Detak jantung dari wanita hamil lebih terdistribusi normal dan hanya sedikit berhubungan dengan tingkat resiko.
 
 Menganalisis lebih lanjut karakteristik Systolic BP (tekanan darah sistol) dan Diastolic BP (tekanan darah diastol) per grup usia.
+data.groupby(by="Age").agg({
+    "SystolicBP": ["max", "min", "mean", "std"],
+    "DiastolicBP": ["max", "min", "mean", "std"],
+})
+
 Menampilkan grafik rata-rata tekanan darah terhadap usia.
+![Tekanan darah terhadap usia](https://github.com/Shue84/Predictive-Analysis/blob/main/gambar/Blood%20Pressure%20by%20Age%20Group.JPG)
 Insight: Berdasarkan usia dan tekanan darah, tekanan darah sangat rendah (baik sistol dan diastol) terekam pada wanita berusia muda, namun tekanan darah normal dan tinggi nampak tidak terlalu berkorelasi dengan usia.
 
 Menganalisis lebih lanjut karakteristik BS (Kadar gula darah), BodyTemp (Suhu tubuh), dan HeartRate (Detak Jantung) per grup usia.
