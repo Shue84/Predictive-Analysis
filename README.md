@@ -34,7 +34,18 @@ Predictive analysis ini akan berfokus pada pengolahan data usia, tekanan darah s
 2. Membuat model machine learning yang dapat memprediksi resiko kehamilan berdasarkan parameter tertentu dari kesehatan ibu.
 
 ### *Solution Statements:*
-Outcomes yang diharapkan adalah 3 kategori: high risk, mid risk, low risk.
+Langkah awal adalah mengetahui korelasi antara usia, tekanan darah, gula darah, suhu tubuh, dan detak jantung terhadap resiko kehamilan dengan cara menganalisis dataset yang tersedia.
+
+Pertama, kolom tingkat resiko kehamilan harus diubah menjadi data numerik sehingga memudahkan untuk analisis. Perubahan tersebut mengikuti setting berikut: low risk = 0 mid risk = 1 high risk = 2
+
+Data dicek lalu dianalisis dengan teknik Exploratory Data Analysis (EDA) bivariate yaitu membandingkan masing-masing fitur terhadap tingkat resiko kehamilan. Analisis data juga akan ditampilkan dalam bentuk diagram sehingga dapat tervisualisasi dengan baik.
+
+Setelah itu, EDA dilakukan untuk melihat hubungan antara usia ("Age) dengan fitur lainnya seperti tekanan darah ("SistolicBP" dan "DiastolicBP), kadar gula darah ("BS"), suhu tubuh ("BodyTemp"), dan detak jantung ("HeartRate").
+
+Metode korelasi juga dilakukan untuk melihat hubungan antar 7 fitur (kolom) yang ada pada dataset. Visualisasi dilakukan dengan menampilkan heatmap serta scatterplot. Hal ini dapat menjawab pertanyaan no 1 pada Problem Statements.
+
+Untuk menjawab Problem Statements kedua, maka dibangun model dengan outcomes yang diharapkan adalah 3 kategori: high risk, mid risk, low risk. Data dibagi menjadi data train dan test dengan rasio 70:30 (dilakukan percobaan untuk rasio standar 80:20 kemudian dicek setelah dijalankan apakah memenuhi harapan atau perlu dilakukan penyesuaian untuk meningkatkan accuracy).
+
 Model machine learning akan dibangun dengan beberapa algoritma dan dipilih model dengan kesalahan prediksi terkecil.
 1. K-Nearest Neighbor.
 2. Random Forest.
@@ -43,6 +54,10 @@ Model machine learning akan dibangun dengan beberapa algoritma dan dipilih model
 
 ### *Metrik Evaluasi*
 Metrik yang digunakan adalah Accuracy (ketepatan klasifikasi tingkat resiko kehamilan - high risk, mid risk, low risk).
+
+Model lalu disusun berdasarkan evaluasi dengan accuracy pada train dan test dan algoritma yang memberikan hasil accuracy tertinggi. Visualisasi perbandingan 4 algoritma juga akan ditunjukkan dalam bentuk barplot graph.
+
+Di akhir, dilakukan ujicoba model apakah memberikan hasil prediksi sesuai dengan yang diharapkan.
 
 
 ## **Data Understanding**
@@ -67,6 +82,7 @@ data = pd.read_csv("/content/Maternal Health Risk Data Set.csv")
 - SystolicBP: Nilai atas dari tekanan darah (dalam satuan mmHg).
 - DiastolicBP: Nilai bawah dari tekanan darah (dalam satuan mmHg).
 - BS: Kadar gula darah dalam satuan konsentrasi molar (mmol/L).
+- BodyTemp: Suhu tubuh dalam satuan Fahrenheit (F).
 - HeartRate: Detak jantung normal pada posisi istirahat (dalam satuan beats per minute).
 - RiskLevel: Tingkat resiko terprediksi selama kehamilan dengan pertimbangan atribut sebelumnya attribute.
 
@@ -85,6 +101,7 @@ data = pd.read_csv("/content/Maternal Health Risk Data Set.csv")
 ### Exploratory Data Analysis (EDA)
 Bivariate Analysis - Usia terhadap Tingkat Resiko
     Menggunakan boxplot 
+    ![Usia terhadap tingkat resiko](gambar/Age by Risk Level.jpg)
 Bivariate Analysis - Tekanan Darah terhadap Tingkat Resiko
     Memetakan distribusi systolicBP dan diastolicBP dengan histogram
     Menggunakan boxplot
