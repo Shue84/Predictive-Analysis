@@ -1,4 +1,4 @@
-# **Proyek Predictive Analysis: Maternal Health - Menilai Resiko Kehamilan**
+# **Laporan Proyek Predictive Analysis: Maternal Health - Menilai Resiko Kehamilan**
 
 - **Nama:** Suyanti Witono
 - **Email:** suyanti.witono@bpkpenaburjakarta.or.id
@@ -92,7 +92,9 @@ data = pd.read_csv("/content/Maternal Health Risk Data Set.csv")
 
 ### Mengetahui lebih lanjut mengenai informasi data yang tersedia:
 - Memastikan tidak ada data yang kosong
+  ```
   data.isna().sum()
+  ```
 - Mengetahui dan menghilangkan data duplikat
   data[data.duplicated(keep='first')]
 - Mengubah data 'RiskLevel' menjadi numerik untuk memudahkan pengolahan statistik lebih lanjut dan plot graph.
