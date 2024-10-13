@@ -65,9 +65,9 @@ Data yang digunakan berasal dari Kaggle: Maternal Health Risk Data https://www.k
 Dataset terdiri dari 1014 data kesehatan ibu hamil dengan parameter kesehatan yaitu usia, tekanan darah sistol, tekanan darah diastol, kadar gula darah, suhu tubuh, dan detak jantung. Tingkat resiko (high risk, mid risk, low risk) adalah fitur target.
 
 ### Impor Library yang dibutuhkan
-numpy
-pandas
-matplotlib.pyplot
+numpy,
+pandas,
+matplotlib.pyplot,
 seaborn
 
 ### Download file dari Kaggle
@@ -96,18 +96,27 @@ data = pd.read_csv("/content/Maternal Health Risk Data Set.csv")
   data.isna().sum()
   ```
 - Mengetahui dan menghilangkan data duplikat
-  data[data.duplicated(keep='first')]
+  ```
+  print("Jumlah duplikasi: ", data.duplicated().sum())
+  ```
+  Hasil: Jumlah duplikasi:  562
 - Mengubah data 'RiskLevel' menjadi numerik untuk memudahkan pengolahan statistik lebih lanjut dan plot graph.
+  ```
   data.replace({"high risk":2, "mid risk":1, "low risk":0}, inplace=True)
+  ```
 - Mengubah data suhu tubuh dari Fahrenheit ke Celcius
+  ```
   data['BodyTemp'] = (data['BodyTemp'] - 32) * 5 / 9
+  ```
 - Memastikan data sudah sesuai
+  ```
   data.describe()
+  ```
 
 ### Exploratory Data Analysis (EDA)
 Bivariate Analysis - Usia terhadap Tingkat Resiko
     Menggunakan boxplot 
-    ![Usia terhadap tingkat resiko](https://github.com/Shue84/Predictive-Analysis/blob/main/gambar/Age%20by%20Risk%20Level.JPG)
+    ![Usia terhadap tingkat resiko](/gambar/Age%20by%20Risk%20Level.JPG)
     
 Bivariate Analysis - Tekanan Darah terhadap Tingkat Resiko
     Memetakan distribusi systolicBP dan diastolicBP dengan histogram
